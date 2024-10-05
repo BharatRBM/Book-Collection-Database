@@ -17,12 +17,16 @@ class ConnectDB:
         config_file = self.read_config_file(
             file_path=r'password_database.txt')
 
-        self.db = mysql.connector.connect(
-            host=config_file['host'],
-            user=config_file['user'],
-            password=config_file['password'],
-            database=config_file['database'])
-
+        try:
+            self.db = mysql.connector.connect(
+                host=config_file['host'],
+                user=config_file['user'],
+                password=config_file['password'],
+                database=config_file['database'])
+            print("Connection successful!")
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            self.db = None
         my_cursor = self.db.cursor()
 
         my_cursor.execute("SELECT * FROM book_details")
